@@ -10,4 +10,3 @@ export const STRAVA_REFRESH_TOKEN = "dbf00fd1fd6a47841b705a67f43d8d9e073e0c46";
 export const TYPE_OUTDOOR = "OutDoor";
 export const TYPE_INDOOR = "InDoor";
 export const TYPE_ALL = "All";
-// export const STRAVA_ACTIVITY_TYPE = TYPE_ALL | TYPE_INDOOR | TYPE_ALL;

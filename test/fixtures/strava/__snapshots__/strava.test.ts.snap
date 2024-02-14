@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lib/strava function getActivityById 1`] = `
+"
+InDoor SUMMARY:
+    Completed: 13 runs
+    Total Distance:: 130.02km (Avg.: 10.00km ❌)
+    Total Moving Time: 701.43Mins (Avg.: 53.96 Mins) ❌
+
+    AVG HR: 147BPM ⤵️ 
+    AVG Cadence: 175/Mins ⤵️ 
+    AVG Effect Score: 47 ⤵️ 
+    
+
+
+All SUMMARY(All Runs & IndoorRuns):
+    Completed: 23 runs
+    Total Distance:: 175.95km (Avg.: 7.65km ❌)
+    Total Moving Time: 942.20Mins (Avg.: 40.97 Mins) ❌
+
+    AVG HR: 152BPM ⤵️ 
+    AVG Cadence: 178/Mins ⤵️ 
+    AVG Effect Score: 44 ⤵️ 
+    "
+`;

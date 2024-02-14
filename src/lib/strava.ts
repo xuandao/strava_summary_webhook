@@ -1,7 +1,6 @@
-import { Strava } from "strava";
+import { Strava, DetailedActivity, SummaryActivity } from "strava";
 import {STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, STRAVA_REFRESH_TOKEN, TYPE_ALL, TYPE_INDOOR, TYPE_OUTDOOR} from "@/lib/const";
 import { getCurrentTimestampMillis } from "@/lib/utils";
-import {DetailedActivity, SummaryActivity} from "@/resources/strava/interface";
 
 const STRAVA_CLIENT = new Strava({
   client_id: STRAVA_CLIENT_ID,
@@ -15,8 +14,7 @@ const STRAVA_CLIENT = new Strava({
  * @returns 
  */
 export async function getActivityById(id:number): Promise<DetailedActivity> {
-  const ret:DetailedActivity = await STRAVA_CLIENT.activities.getActivityById(id)
-  return ret;
+  return await STRAVA_CLIENT.activities.getActivityById({id})
 }
 
 /**
@@ -30,7 +28,7 @@ export async function getLoggedInAthleteActivities(type: string, days: number): 
   const DATE_GAP = 1000 * 60 * 60 * 24 * days;
   const after = (getCurrentTimestampMillis() - DATE_GAP) / 1000;
 
-  const ret:SummaryActivity[] = await STRAVA_CLIENT.activities.getActivityById({
+  const ret:SummaryActivity[] = await STRAVA_CLIENT.activities.getLoggedInAthleteActivities({
       after,
       per_page: 50
   });
@@ -40,11 +38,25 @@ export async function getLoggedInAthleteActivities(type: string, days: number): 
 }
 
 /**
+ * 更新活动的 description
+ * @param id 
+ * @param description 
+ * @returns 
+ */
+export async function updateActivityDescription(id:number, description:string): Promise<boolean> {
+    await STRAVA_CLIENT.activities.updateActivityById({
+      id: id,
+      description
+    });
+
+    return true
+}
+
+/**
  * 更新活动 summary
  * @returns 
  */
-export async function updateActivitiesSummary(curActivity: DetailedActivity, allActivitiesList: SummaryActivity[]): Promise<string>{
-  const {id} = curActivity;
+export function generateActivitiesSummary(curActivity: DetailedActivity, allActivitiesList: SummaryActivity[]): string{
   const subType = curActivity.map.summary_polyline !== undefined ? TYPE_OUTDOOR : TYPE_INDOOR;
 
     // 当前类型的 Summary
@@ -63,10 +75,8 @@ export async function updateActivitiesSummary(curActivity: DetailedActivity, all
     );
 
     const description = `${sameTypeSummary}\n\n${allSummary}`;
-    await STRAVA_CLIENT.activities.updateActivityById({
-      id: id,
-      description
-    });
+
+    return description;
 }
 
 /**
