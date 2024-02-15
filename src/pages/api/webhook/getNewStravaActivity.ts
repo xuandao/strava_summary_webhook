@@ -9,13 +9,16 @@ import {getActivityById, getLoggedInAthleteActivities, generateActivitiesSummary
  */
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<IAPIResponseData> 
+  res: NextApiResponse 
   ) {
-  const hookContent:IStravaWebbhookContent = req.body;
-  if(req.method !== 'POST' || hookContent === null){
-    return res.status(500).json({code: 500, message: '请求参数异常'})
+  if(req.method === 'GET' && req.query['hub.challenge']){
+    return res.status(200).json({
+      "hub.challenge": req.query["hub.challenge"]
+    })
   }
 
+  // 处理 webhook
+  const hookContent:IStravaWebbhookContent = req.body;
   // 获取当前活动的数据
   const {object_id} = hookContent
 
@@ -31,13 +34,20 @@ export default async function handler(
       updateActivityDescription(object_id, description);
 
       // 触发 github 数据同步任务
-      triggerDataSyncAction();
+      // triggerDataSyncAction();
     }
   }
 
-  // 设置状态码为 200 OK，并发送 JSON 响应
   return res.status(200).json({
     code: 200,
     message: 'success.'
   })
+}
+
+async function verifyWebhook(){
+
+}
+
+async function handleWebhook(hookContent: IStravaWebbhookContent){
+
 }

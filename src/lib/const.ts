@@ -1,5 +1,3 @@
-import 'dotenv/config'
-
 const ENV = process.env;
 export const GIT_OWNER = ENV.GIT_OWNER || "";
 export const GIT_REPO = ENV.GIT_REPO || "";
