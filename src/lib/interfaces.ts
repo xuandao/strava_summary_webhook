@@ -7,7 +7,7 @@ export interface IStravaWebbhookContent{
     event_time: number;
 }
 
-type IAPIResponseData = {
+export type IAPIResponseData = {
     code: number,
     message: string
   }

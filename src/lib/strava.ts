@@ -51,6 +51,17 @@ export async function updateActivityDescription(id:number, description:string): 
 }
 
 /**
+ * 订阅 webhook
+ * @param callback_url 
+ */
+export async function createSubscription(callback_url: string): Promise<void>{
+  await STRAVA_CLIENT.subscriptions.createSubscription({
+    callback_url,
+    verify_token: "STRAVA"
+  })
+}
+
+/**
  * 更新活动 summary
  * @returns 
  */

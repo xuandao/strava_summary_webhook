@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { IStravaWebbhookContent, IAPIResponseData} from "@/lib/interfaces";
 import { triggerDataSyncAction } from "@/lib/github";
 import {getActivityById, getLoggedInAthleteActivities, generateActivitiesSummary, updateActivityDescription} from "@/lib/strava";
-import { resolve } from "path";
 /**
  * strava webhook
  * @param req 
