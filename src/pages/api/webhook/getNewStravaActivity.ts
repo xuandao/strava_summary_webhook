@@ -32,7 +32,7 @@ export default async function handler(
       updateActivityDescription(object_id, description);
 
       // 触发 github 数据同步任务
-      // triggerDataSyncAction();
+      triggerDataSyncAction();
     }
   }
 
