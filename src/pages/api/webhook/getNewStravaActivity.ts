@@ -13,7 +13,7 @@ export default async function handler(
   ) {
   const hookContent:IStravaWebbhookContent = req.body;
   if(req.method !== 'POST' || hookContent === null){
-    res.status(500).json({code: 500, message: '请求参数异常'})
+    return res.status(500).json({code: 500, message: '请求参数异常'})
   }
 
   // 获取当前活动的数据
