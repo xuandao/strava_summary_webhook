@@ -9,13 +9,18 @@ const octokit = new Octokit({
  * @returns 
  */
 export async function triggerDataSyncAction() {
-    await octokit.request('POST /repos/{owner}/{repo}/dispatches', {
+    const ret = await octokit.request('POST /repos/{owner}/{repo}/dispatches', {
         owner: GIT_OWNER,
         repo: GIT_REPO,
         event_type: GIT_ACTION_TYPE,
-        client_payload: {},
+        client_payload: {
+            unit: false,
+            integration: true
+        },
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     })
+
+    return ret;
 }

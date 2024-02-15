@@ -43,13 +43,11 @@ export async function getLoggedInAthleteActivities(type: string, days: number): 
  * @param description 
  * @returns 
  */
-export async function updateActivityDescription(id:number, description:string): Promise<boolean> {
+export async function updateActivityDescription(id:number, description:string): Promise<void> {
     await STRAVA_CLIENT.activities.updateActivityById({
       id: id,
       description
     });
-
-    return true
 }
 
 /**
