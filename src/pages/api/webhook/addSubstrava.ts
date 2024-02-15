@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createSubscription } from "@/lib/strava";
+import {VERCEL_HOST} from "@/lib/const";
 /**
  * github action trigger
  * @param req 
@@ -10,13 +11,8 @@ export default async function handler(
   res: NextApiResponse
   ) {
   const query = req.query;
-  // @ts-ignore
-  const callback_url:string = query.callback_url;
 
-  if(!callback_url){
-    return res.status(500).json({code: 500, message: 'callback_url 不存在'})
-  }
-
+  const callback_url = `https://${VERCEL_HOST}/api/webhook/getNewStravaActivity`;
   const ret = await createSubscription(callback_url);
 
   return res.status(200).json({

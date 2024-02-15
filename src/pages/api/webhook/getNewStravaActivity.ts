@@ -11,9 +11,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse 
   ) {
+  // 绑定webhook 验证
   if(req.method === 'GET' && req.query['hub.challenge']){
     return res.status(200).json({
       "hub.challenge": req.query["hub.challenge"]
+    })
+  }
+
+  // 无数据
+  if(req.method === 'POST' && !req.body){
+    return res.status(500).json({
+      code: 500,
+      success: false
     })
   }
 
@@ -34,7 +43,7 @@ export default async function handler(
       updateActivityDescription(object_id, description);
 
       // 触发 github 数据同步任务
-      // triggerDataSyncAction();
+      triggerDataSyncAction();
     }
   }
 
@@ -42,12 +51,4 @@ export default async function handler(
     code: 200,
     message: 'success.'
   })
-}
-
-async function verifyWebhook(){
-
-}
-
-async function handleWebhook(hookContent: IStravaWebbhookContent){
-
 }

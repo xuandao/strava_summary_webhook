@@ -93,7 +93,7 @@ export function generateActivitiesSummary(curActivity: DetailedActivity, allActi
       allActivitiesList
     );
 
-    const description = `${sameTypeSummary}\n\n${allSummary}`;
+    const description = `${sameTypeSummary}\n\n${allSummary}\n power by https://github.com/xuandao/strava_summary_webhook `;
 
     return description;
 }
