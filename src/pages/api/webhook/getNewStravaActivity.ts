@@ -11,7 +11,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse 
   ) {
-  console.log(`request data: query ${req.query}; body ${req.body}`);
+  try{
+    console.log(`request data: query ${JSON.stringify(req.query)}; body ${JSON.stringify(req.body)}`);
+  }catch(e) {
+    //
+  }
 
   if(req.method === 'GET'){
     // 绑定webhook 验证
