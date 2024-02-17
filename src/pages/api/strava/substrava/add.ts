@@ -12,8 +12,6 @@ export default async function handler(
   res: NextApiResponse
   ) {
   requestArgsLog(req);
-  const query = req.query;
-
   const callback_url = `https://${VERCEL_HOST}/api/webhook/getNewStravaActivity`;
   const ret = await createSubscription(callback_url);
 
