@@ -23,5 +23,5 @@ export function requestArgsLog(req: NextApiRequest){
             break;
     }
 
-    console.log(`${req.url} ${req.method} requestArguments: ${JSON.stringify(args)}`);
+    console.log(`requestArguments: ${JSON.stringify(args)}`);
 }
