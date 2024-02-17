@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { IStravaWebbhookContent, IAPIResponseData} from "@/lib/interfaces";
 import { triggerDataSyncAction } from "@/lib/github";
 import {getActivityById, getLoggedInAthleteActivities, generateActivitiesSummary, updateActivityDescription} from "@/lib/strava";
-import {requestArgsLog} from "@/lib/utils";
+import {requestArgsLog, getCurrentTimestampMillis} from "@/lib/utils";
 
 /**
  * strava webhook
@@ -53,7 +53,8 @@ export default async function handler(
 
   return res.status(200).json({
     code: 200,
-    message: 'success.'
+    message: 'success.',
+    ts: getCurrentTimestampMillis()
   })
 }
 
