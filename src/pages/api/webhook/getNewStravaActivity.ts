@@ -30,7 +30,8 @@ export default async function handler(
       await updateDescription(id)
       return res.status(200).json({
         code: 200,
-        message: 'success.'
+        message: 'success.',
+        ts: getCurrentTimestampMillis()
       })
     }
   }
@@ -39,6 +40,7 @@ export default async function handler(
   if(req.method === 'POST' && !req.body){
     return res.status(500).json({
       code: 500,
+      ts: getCurrentTimestampMillis(),
       success: false
     })
   }
