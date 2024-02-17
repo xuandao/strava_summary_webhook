@@ -72,6 +72,15 @@ export async function getSubscription(): Promise<any>{
 }
 
 /**
+ * 获取webhook状态
+ * @param callback_url 
+ */
+export async function delSubscription(id:number): Promise<any>{
+  const ret = await STRAVA_CLIENT.subscriptions.deleteSubscription(id);
+  return ret;
+}
+
+/**
  * 更新活动 summary
  * @returns 
  */

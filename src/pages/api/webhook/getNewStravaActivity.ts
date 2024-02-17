@@ -11,11 +11,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse 
   ) {
-  // 绑定webhook 验证
-  if(req.method === 'GET' && req.query['hub.challenge']){
-    return res.status(200).json({
-      "hub.challenge": req.query["hub.challenge"]
-    })
+  console.log(`request data: query ${req.query}; body ${req.body}`);
+
+  if(req.method === 'GET'){
+    // 绑定webhook 验证
+    if(req.query['hub.challenge']){
+      return res.status(200).json({
+        "hub.challenge": req.query["hub.challenge"]
+      })
+    }
+
+    // 手动更新 Description
+    if(req.query['object_id']){
+      // @ts-ignore
+      const id = req.query['object_id']*1;
+      await updateDescription(id)
+      return res.status(200).json({
+        code: 200,
+        message: 'success.'
+      })
+    }
   }
 
   // 无数据
@@ -28,27 +43,33 @@ export default async function handler(
 
   // 处理 webhook
   const hookContent:IStravaWebbhookContent = req.body;
-  // 获取当前活动的数据
-  const {object_id} = hookContent
 
   // 仅在创建活动时进行处理
   if(hookContent.object_type === 'activity' && hookContent.aspect_type ==='create' ){
-    const [currentActivity, allActivitiesList] = await Promise.all([
-      getActivityById(object_id), 
-      getLoggedInAthleteActivities('Run', 28)]);
-
-    // 仅活动为 Run 时才做处理
-    if(currentActivity.type === 'Run'){
-      const description = generateActivitiesSummary(currentActivity, allActivitiesList)
-      updateActivityDescription(object_id, description);
-
-      // 触发 github 数据同步任务
-      triggerDataSyncAction();
-    }
+    await updateDescription(hookContent.object_id)
   }
 
   return res.status(200).json({
     code: 200,
     message: 'success.'
   })
+}
+
+/**
+ * 更新 object_id 的相关描述
+ * @param object_id 
+ */
+async function updateDescription(object_id:number) {
+  const [currentActivity, allActivitiesList] = await Promise.all([
+    getActivityById(object_id), 
+    getLoggedInAthleteActivities('Run', 28)]);
+
+  // 仅活动为 Run 时才做处理
+  if(currentActivity.type === 'Run'){
+    const description = generateActivitiesSummary(currentActivity, allActivitiesList)
+    updateActivityDescription(object_id, description);
+
+    // 触发 github 数据同步任务
+    triggerDataSyncAction();
+  }
 }
