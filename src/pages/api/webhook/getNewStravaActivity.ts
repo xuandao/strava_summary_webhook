@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { IStravaWebbhookContent, IAPIResponseData} from "@/lib/interfaces";
 import { triggerDataSyncAction } from "@/lib/github";
 import {getActivityById, getLoggedInAthleteActivities, generateActivitiesSummary, updateActivityDescription} from "@/lib/strava";
+import {requestArgsLog} from "@/lib/utils";
+
 /**
  * strava webhook
  * @param req 
@@ -11,11 +13,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse 
   ) {
-  try{
-    console.log(`request data: query ${JSON.stringify(req.query)}; body ${JSON.stringify(req.body)}`);
-  }catch(e) {
-    //
-  }
+  requestArgsLog(req);
 
   if(req.method === 'GET'){
     // 绑定webhook 验证

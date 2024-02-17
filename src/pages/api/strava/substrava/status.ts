@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSubscription } from "@/lib/strava";
+
 /**
  * github action trigger
  * @param req 
