@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { triggerDataSyncAction } from "@/lib/github";
+import {requestArgsLog } from "@/lib/utils";
 /**
  * github action trigger
  * @param req 
@@ -9,6 +10,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
   ) {
+  requestArgsLog(req);
+
   // 触发 github 数据同步任务
   const ret = await triggerDataSyncAction();
 

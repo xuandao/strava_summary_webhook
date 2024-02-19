@@ -38,6 +38,7 @@ export default async function handler(
 
   // 无数据
   if(req.method === 'POST' && !req.body){
+    console.log('req.body is null')
     return res.status(500).json({
       code: 500,
       ts: getCurrentTimestampMillis(),
@@ -68,11 +69,14 @@ async function updateDescription(object_id:number) {
   const [currentActivity, allActivitiesList] = await Promise.all([
     getActivityById(object_id), 
     getLoggedInAthleteActivities('Run', 28)]);
+  console.log(`getActivityById(${object_id}): ${JSON.stringify(currentActivity)}`);
+  console.log(`getLoggedInAthleteActivities(): ${JSON.stringify(allActivitiesList)}`);
 
   // 仅活动为 Run 时才做处理
   if(currentActivity.type === 'Run'){
     const description = generateActivitiesSummary(currentActivity, allActivitiesList)
     updateActivityDescription(object_id, description);
+    console.log(`updateActivityDescription: ${description}`);
 
     // 触发 github 数据同步任务
     triggerDataSyncAction();

@@ -22,7 +22,9 @@ export async function triggerDataSyncAction() {
                 'X-GitHub-Api-Version': '2022-11-28'
             }
         })
+        console.log(`triggerDataSyncAction(): SUCCESS`)
     }catch(e){
-        // 无需处理
+        // @ts-ignore
+        console.error(`triggerDataSyncAction(): ${e.message}`)
     }
 }
