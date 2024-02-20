@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.89% </span>
+                <span class="strong">79.05% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>155/194</span>
+                <span class='fraction'>151/191</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.89% </span>
+                <span class="strong">79.05% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>155/194</span>
+                <span class='fraction'>151/191</span>
             </div>
         
             
@@ -253,10 +253,7 @@
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -371,8 +368,11 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -381,12 +381,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -536,7 +530,7 @@ const STRAVA_CLIENT = new Strava({
  * @returns 
  */
 export function generateActivitiesSummary(curActivity: DetailedActivity, allActivitiesList: SummaryActivity[]): string{
-  const subType = curActivity.map.summary_polyline !== undefined <span class="branch-0 cbranch-no" title="branch not covered" >? TYPE_OUTDOOR </span>: TYPE_INDOOR;
+  const subType = curActivity.map.summary_polyline === "" <span class="branch-0 cbranch-no" title="branch not covered" >? TYPE_INDOOR </span>: TYPE_OUTDOOR;
 &nbsp;
     // 当前类型的 Summary
     const subActivitesList = getSubtypeActivites(subType, allActivitiesList);
@@ -563,12 +557,12 @@ export function generateActivitiesSummary(curActivity: DetailedActivity, allActi
  * @param subType 
  */
 function getSubtypeActivites(subType:string, allActivitiesList: SummaryActivity[]): SummaryActivity[] {
-  if(subType === TYPE_OUTDOOR)<span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >    return allActivitiesList.filter(item =&gt; !!item.map.summary_polyline);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-&nbsp;
-  return allActivitiesList.filter(item =&gt; !item.map.summary_polyline);
-}
+  if(subType === TYPE_OUTDOOR){
+    return allActivitiesList.filter(item =&gt; item.map.summary_polyline !== "");
+  }
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >  return allActivitiesList.filter(item =&gt; item.map.summary_polyline === "");</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 /**
  * 渲染 Summary
@@ -618,8 +612,7 @@ function rendersummaryResult(curType: string, curActivity: DetailedActivity, all
   const EMOJI_UP = "";
   const EMOJI_DOWN = "⤵️";
 &nbsp;
-  return `
-${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs &amp; IndoorRuns)" : ""}:
+  return `${curType} SUMMARY${curType === TYPE_ALL ? "(IndoorRuns &amp; OutdoorRuns)" : ""}:
     Completed: ${DATA_LEN} runs
     Total Distance:: ${(TOTAL_DISTANCE / 1000).toFixed(2)}km (Avg.: ${(
     AVG_DISTANCE / 1000
@@ -631,7 +624,6 @@ ${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs &amp; IndoorRuns)" : ""}:
   ).toFixed(2)} Mins) ${
     curActivity.moving_time &gt; AVG_MTime <span class="branch-0 cbranch-no" title="branch not covered" >? EMOJI_DONE </span>: EMOJI_UNDONE
   }
-&nbsp;
     AVG HR: ${AVG_HR.toFixed(0)}BPM ${
     curActivity.average_heartrate &gt; AVG_HR <span class="branch-0 cbranch-no" title="branch not covered" >? EMOJI_UP </span>: EMOJI_DOWN
   } 
@@ -640,8 +632,7 @@ ${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs &amp; IndoorRuns)" : ""}:
   } 
     AVG Effect Score: ${AVG_SCORE.toFixed(0)} ${
     curActivity.suffer_score &gt; AVG_SCORE <span class="branch-0 cbranch-no" title="branch not covered" >? EMOJI_UP </span>: EMOJI_DOWN
-  } 
-    `;
+  }`;
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -649,7 +640,7 @@ ${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs &amp; IndoorRuns)" : ""}:
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-19T13:21:31.495Z
+                at 2024-02-20T23:45:38.488Z
             </div>
         <script src="prettify.js"></script>
         <script>

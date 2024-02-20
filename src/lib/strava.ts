@@ -85,7 +85,7 @@ export async function delSubscription(id:number): Promise<any>{
  * @returns 
  */
 export function generateActivitiesSummary(curActivity: DetailedActivity, allActivitiesList: SummaryActivity[]): string{
-  const subType = curActivity.map.summary_polyline !== undefined ? TYPE_OUTDOOR : TYPE_INDOOR;
+  const subType = curActivity.map.summary_polyline === "" ? TYPE_INDOOR : TYPE_OUTDOOR;
 
     // 当前类型的 Summary
     const subActivitesList = getSubtypeActivites(subType, allActivitiesList);
@@ -113,10 +113,10 @@ export function generateActivitiesSummary(curActivity: DetailedActivity, allActi
  */
 function getSubtypeActivites(subType:string, allActivitiesList: SummaryActivity[]): SummaryActivity[] {
   if(subType === TYPE_OUTDOOR){
-    return allActivitiesList.filter(item => !!item.map.summary_polyline);
+    return allActivitiesList.filter(item => item.map.summary_polyline !== "");
   }
 
-  return allActivitiesList.filter(item => !item.map.summary_polyline);
+  return allActivitiesList.filter(item => item.map.summary_polyline === "");
 }
 
 /**
@@ -167,8 +167,7 @@ function rendersummaryResult(curType: string, curActivity: DetailedActivity, all
   const EMOJI_UP = "";
   const EMOJI_DOWN = "⤵️";
 
-  return `
-${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs & IndoorRuns)" : ""}:
+  return `${curType} SUMMARY${curType === TYPE_ALL ? "(IndoorRuns & OutdoorRuns)" : ""}:
     Completed: ${DATA_LEN} runs
     Total Distance:: ${(TOTAL_DISTANCE / 1000).toFixed(2)}km (Avg.: ${(
     AVG_DISTANCE / 1000
@@ -180,7 +179,6 @@ ${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs & IndoorRuns)" : ""}:
   ).toFixed(2)} Mins) ${
     curActivity.moving_time > AVG_MTime ? EMOJI_DONE : EMOJI_UNDONE
   }
-
     AVG HR: ${AVG_HR.toFixed(0)}BPM ${
     curActivity.average_heartrate > AVG_HR ? EMOJI_UP : EMOJI_DOWN
   } 
@@ -189,6 +187,5 @@ ${curType} SUMMARY${curType === TYPE_ALL ? "(All Runs & IndoorRuns)" : ""}:
   } 
     AVG Effect Score: ${AVG_SCORE.toFixed(0)} ${
     curActivity.suffer_score > AVG_SCORE ? EMOJI_UP : EMOJI_DOWN
-  } 
-    `;
+  }`;
 }
