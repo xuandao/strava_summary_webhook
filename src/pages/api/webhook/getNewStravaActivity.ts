@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { IStravaWebbhookContent, IAPIResponseData} from "@/lib/interfaces";
-import { triggerDataSyncAction } from "@/lib/github";
 import {getActivityById, getLoggedInAthleteActivities, generateActivitiesSummary, updateActivityDescription} from "@/lib/strava";
 import {requestArgsLog, getCurrentTimestampMillis} from "@/lib/utils";
 
@@ -77,8 +76,5 @@ async function updateDescription(object_id:number) {
     const description = generateActivitiesSummary(currentActivity, allActivitiesList)
     updateActivityDescription(object_id, description);
     console.log(`updateActivityDescription: ${description}`);
-
-    // 触发 github 数据同步任务
-    triggerDataSyncAction();
   }
 }
